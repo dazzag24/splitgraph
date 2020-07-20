@@ -7,3 +7,6 @@
 [submodule "engine/src/postgres-elasticsearch-fdw"]
 	path = engine/src/postgres-elasticsearch-fdw
 	url = https://github.com/splitgraph/postgres-elasticsearch-fdw.git
+[submodule "engine/src/parquet_fdw"]
+	path = engine/src/parquet_fdw
+	url = https://github.com/adjust/parquet_fdw.git
