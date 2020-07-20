@@ -62,6 +62,18 @@ RUN ldconfig
 RUN mkdir -p /output/root
 
 #####
+##### parquet_fdw
+#####
+
+FROM toolchain AS builder_parquet_fdw
+
+COPY ./engine/src/parquet_fdw /src/parquet_fdw
+COPY ./engine/build_scripts/fdws/parquet_fdw /build
+
+RUN /build/install_arrow.sh
+RUN /build/build_parquet_fdw.sh
+
+#####
 ##### cstore_fdw and multicorn
 #####
 
@@ -140,6 +152,9 @@ RUN mkdir /build
 COPY ./engine/build_scripts/build_splitgraph.sh /build/
 RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip /build/build_splitgraph.sh
 
+# Install parquet_fdw dependencies
+COPY ./engine/build_scripts/fdws/parquet_fdw/install_arrow.sh /build/install_arrow.sh
+RUN /build/install_arrow.sh
 
 RUN mkdir ~/.gnupg && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf && \
     apt-key adv --homedir ~/.gnupg --keyserver hkp://keyserver.ubuntu.com --recv-keys 5072E1F5 && \
@@ -161,6 +176,7 @@ COPY --from=builder_cstore_multicorn \
 
 COPY --from=builder_mongo_fdw /output/root /
 COPY --from=builder_mysql_fdw /output/root /
+COPY --from=builder_parquet_fdw /output/root /
 
 RUN ldconfig
 

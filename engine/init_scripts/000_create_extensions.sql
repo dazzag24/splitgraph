@@ -3,5 +3,8 @@ CREATE EXTENSION mongo_fdw;
 CREATE EXTENSION mysql_fdw;
 CREATE EXTENSION multicorn;
 CREATE EXTENSION cstore_fdw;
+CREATE EXTENSION parquet_fdw;
 --CREATE EXTENSION plpython3u;
 CREATE SERVER cstore_server FOREIGN DATA WRAPPER cstore_fdw;
+CREATE SERVER parquet_server FOREIGN DATA WRAPPER parquet_fdw;
+--CREATE user mapping for postgres server parquet_server options (user 'postgres');
